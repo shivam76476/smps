@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>SPMS | Student Registration Form - Smart Placement Management System</title>
+  <!-- Google Fonts & Font Awesome -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: radial-gradient(circle at 10% 20%, #08080c, #000000);
+      font-family: 'Inter', sans-serif;
+      color: #ededed;
+      line-height: 1.5;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    /* custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #111;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #c9a03d;
+      border-radius: 6px;
+    }
+
+    /* background abstract shapes */
+    .bg-shapes {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: -2;
+    }
+    .shape {
+      position: absolute;
+      filter: blur(100px);
+      opacity: 0.35;
+      border-radius: 50%;
+    }
+    .shape1 {
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, #c9a03d, #2b2b2b);
+      top: -150px;
+      right: -100px;
+    }
+    .shape2 {
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, #3a2c1a, #000);
+      bottom: -200px;
+      left: -150px;
+    }
+
+    /* container */
+    .form-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 3rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* header */
+    .form-header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+    .form-header h1 {
+      font-size: 2.8rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #FFFFFF, #e0c38c);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      margin-bottom: 0.5rem;
+    }
+    .form-header p {
+      color: #b0b0b0;
+      font-size: 1rem;
+    }
+    .step-indicator {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .step {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #777;
+      font-size: 0.85rem;
+    }
+    .step.active {
+      color: #c9a03d;
+    }
+    .step.completed {
+      color: #c9a03d;
+    }
+    .step i {
+      font-size: 1.2rem;
+    }
+
+    /* premium glass card form */
+    .form-card {
+      background: rgba(12, 12, 20, 0.7);
+      backdrop-filter: blur(16px);
+      border-radius: 40px;
+      border: 1px solid rgba(201, 160, 61, 0.25);
+      padding: 2rem 2.5rem;
+      box-shadow: 0 25px 45px -12px rgba(0,0,0,0.5);
+      transition: all 0.3s;
+    }
+
+    /* form sections */
+    .form-section {
+      margin-bottom: 2rem;
+      animation: fadeSlideUp 0.5s ease;
+    }
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid rgba(201, 160, 61, 0.4);
+      display: inline-block;
+    }
+
+    /* form grid */
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+    .full-width {
+      grid-column: span 2;
+    }
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .input-group label {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #e0c38c;
+      letter-spacing: 0.3px;
+    }
+    .input-group label i {
+      margin-right: 6px;
+      font-size: 0.8rem;
+    }
+    .input-group input, .input-group select, .input-group textarea {
+      background: rgba(20, 20, 30, 0.8);
+      border: 1px solid rgba(201, 160, 61, 0.3);
+      border-radius: 20px;
+      padding: 12px 18px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      color: #fff;
+      transition: all 0.25s;
+      outline: none;
+    }
+    .input-group input:focus, .input-group select:focus, .input-group textarea:focus {
+      border-color: #c9a03d;
+      box-shadow: 0 0 0 3px rgba(201, 160, 61, 0.2);
+      background: rgba(30, 30, 40, 0.9);
+    }
+    .input-group input::placeholder, .input-group textarea::placeholder {
+      color: #6a6a6a;
+    }
+    /* file upload custom */
+    .file-upload {
+      position: relative;
+      display: inline-block;
+      width: 100%;
+    }
+    .file-upload input[type="file"] {
+      position: absolute;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+    .file-label {
+      background: rgba(201, 160, 61, 0.15);
+      border: 1px dashed rgba(201, 160, 61, 0.5);
+      border-radius: 20px;
+      padding: 12px 18px;
+      text-align: center;
+      display: block;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .file-label:hover {
+      background: rgba(201, 160, 61, 0.25);
+    }
+
+    /* skills chips */
+    .skills-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      margin-top: 0.5rem;
+    }
+    .skill-chip {
+      background: rgba(201, 160, 61, 0.15);
+      padding: 6px 16px;
+      border-radius: 40px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: 0.2s;
+      border: 1px solid transparent;
+    }
+    .skill-chip.selected {
+      background: rgba(201, 160, 61, 0.4);
+      border-color: #c9a03d;
+      color: #fff;
+    }
+    .skill-chip:hover {
+      background: rgba(201, 160, 61, 0.3);
+    }
+
+    /* buttons */
+    .form-buttons {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #c9a03d, #b3862a);
+      border: none;
+      color: #0a0a0a;
+      font-weight: 600;
+      padding: 12px 32px;
+      border-radius: 40px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-primary:hover {
+      transform: scale(1.02);
+      box-shadow: 0 12px 28px rgba(201, 160, 61, 0.4);
+    }
+    .btn-outline {
+      background: transparent;
+      border: 1px solid rgba(201, 160, 61, 0.6);
+      color: #e0c38c;
+      font-weight: 500;
+      padding: 12px 28px;
+      border-radius: 40px;
+      cursor: pointer;
+      transition: all 0.25s;
+    }
+    .btn-outline:hover {
+      background: rgba(201, 160, 61, 0.15);
+      border-color: #c9a03d;
+    }
+
+    /* success message */
+    .success-message {
+      text-align: center;
+      padding: 2rem;
+      background: rgba(201, 160, 61, 0.1);
+      border-radius: 32px;
+      backdrop-filter: blur(8px);
+    }
+    .hidden {
+      display: none;
+    }
+
+    /* responsive */
+    @media (max-width: 768px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+      .full-width {
+        grid-column: span 1;
+      }
+      .form-card {
+        padding: 1.5rem;
+      }
+      .form-header h1 {
+        font-size: 2rem;
+      }
+    }
+
+    @keyframes fadeSlideUp {
+      from {
+        opacity: 0;
+        transform: translateY(15px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="bg-shapes">
+  <div class="shape shape1"></div>
+  <div class="shape shape2"></div>
+</div>
+
+<div class="form-container">
+  <div class="form-header">
+    <h1><i class="fas fa-user-graduate"></i> Student Registration</h1>
+    <p>Join the Smart Placement Ecosystem — Complete your profile for personalized opportunities</p>
+    <div class="step-indicator">
+      <div class="step active" id="step1Indicator"><i class="fas fa-user-check"></i> Personal</div>
+      <div class="step" id="step2Indicator"><i class="fas fa-graduation-cap"></i> Academic</div>
+      <div class="step" id="step3Indicator"><i class="fas fa-briefcase"></i> Professional</div>
+      <div class="step" id="step4Indicator"><i class="fas fa-upload"></i> Documents</div>
+    </div>
+  </div>
+
+  <div class="form-card">
+    <!-- Multi-step form -->
+    <form id="studentForm" onsubmit="event.preventDefault(); handleSubmit();">
+      <!-- Step 1: Personal Information -->
+      <div id="step1" class="form-section">
+        <h3 class="section-title"><i class="fas fa-id-card"></i> Personal Details</h3>
+        <div class="form-grid">
+          <div class="input-group"><label><i class="fas fa-user"></i> Full Name *</label><input type="text" id="fullName" placeholder="Johnathan Doe" required></div>
+          <div class="input-group"><label><i class="fas fa-envelope"></i> Email Address *</label><input type="email" id="email" placeholder="john@university.edu" required></div>
+          <div class="input-group"><label><i class="fas fa-phone"></i> Phone Number *</label><input type="tel" id="phone" placeholder="+91 9876543210" required></div>
+          <div class="input-group"><label><i class="fas fa-calendar-alt"></i> Date of Birth</label><input type="date" id="dob"></div>
+          <div class="input-group"><label><i class="fas fa-venus-mars"></i> Gender</label><select id="gender"><option>Male</option><option>Female</option><option>Other</option></select></div>
+          <div class="input-group full-width"><label><i class="fas fa-map-marker-alt"></i> Current Address</label><input type="text" id="address" placeholder="City, State, Country"></div>
+        </div>
+      </div>
+
+      <!-- Step 2: Academic Information -->
+      <div id="step2" class="form-section" style="display:none;">
+        <h3 class="section-title"><i class="fas fa-graduation-cap"></i> Academic Details</h3>
+        <div class="form-grid">
+          <div class="input-group"><label><i class="fas fa-university"></i> University / Institute *</label><input type="text" id="university" placeholder="Indian Institute of Technology" required></div>
+          <div class="input-group"><label><i class="fas fa-book"></i> Course / Degree *</label><input type="text" id="degree" placeholder="B.Tech Computer Science" required></div>
+          <div class="input-group"><label><i class="fas fa-chart-line"></i> Current CGPA / Percentage *</label><input type="number" step="0.01" id="cgpa" placeholder="9.2" required></div>
+          <div class="input-group"><label><i class="fas fa-calendar"></i> Graduation Year *</label><select id="gradYear"><option>2025</option><option>2026</option><option>2027</option><option>2028</option></select></div>
+          <div class="input-group full-width"><label><i class="fas fa-trophy"></i> Achievements (optional)</label><textarea rows="2" placeholder="Hackathon wins, research papers, leadership..."></textarea></div>
+        </div>
+      </div>
+
+      <!-- Step 3: Professional & Skills -->
+      <div id="step3" class="form-section" style="display:none;">
+        <h3 class="section-title"><i class="fas fa-code"></i> Skills & Experience</h3>
+        <div class="form-grid">
+          <div class="input-group full-width"><label><i class="fas fa-microchip"></i> Technical Skills *</label>
+            <div class="skills-container" id="skillsContainer">
+              <span class="skill-chip" data-skill="JavaScript">JavaScript</span>
+              <span class="skill-chip" data-skill="Python">Python</span>
+              <span class="skill-chip" data-skill="React">React</span>
+              <span class="skill-chip" data-skill="Node.js">Node.js</span>
+              <span class="skill-chip" data-skill="Java">Java</span>
+              <span class="skill-chip" data-skill="SQL">SQL</span>
+              <span class="skill-chip" data-skill="AWS">AWS</span>
+              <span class="skill-chip" data-skill="UI/UX">UI/UX</span>
+            </div>
+            <input type="hidden" id="selectedSkills" value="">
+            <small style="color:#aaa;">Click to select multiple skills</small>
+          </div>
+          <div class="input-group full-width"><label><i class="fas fa-briefcase"></i> Internships / Work Experience</label><textarea rows="3" id="experience" placeholder="Company, role, duration, key contributions..."></textarea></div>
+          <div class="input-group"><label><i class="fab fa-github"></i> GitHub Profile</label><input type="url" id="github" placeholder="https://github.com/username"></div>
+          <div class="input-group"><label><i class="fab fa-linkedin"></i> LinkedIn Profile</label><input type="url" id="linkedin" placeholder="https://linkedin.com/in/username"></div>
+          <div class="input-group full-width"><label><i class="fas fa-globe"></i> Portfolio (optional)</label><input type="url" placeholder="Personal website / portfolio"></div>
+        </div>
+      </div>
+
+      <!-- Step 4: Documents & Preferences -->
+      <div id="step4" class="form-section" style="display:none;">
+        <h3 class="section-title"><i class="fas fa-file-alt"></i> Documents & Preferences</h3>
+        <div class="form-grid">
+          <div class="input-group full-width">
+            <label><i class="fas fa-file-pdf"></i> Resume / CV * (PDF only)</label>
+            <div class="file-upload">
+              <div class="file-label" id="resumeLabel"><i class="fas fa-cloud-upload-alt"></i> Click to upload resume (PDF, Max 5MB)</div>
+              <input type="file" id="resumeFile" accept=".pdf" required>
+            </div>
+          </div>
+          <div class="input-group full-width">
+            <label><i class="fas fa-image"></i> Profile Photo (optional)</label>
+            <div class="file-upload">
+              <div class="file-label" id="photoLabel"><i class="fas fa-camera"></i> Upload photo</div>
+              <input type="file" id="photoFile" accept="image/*">
+            </div>
+          </div>
+          <div class="input-group"><label><i class="fas fa-dollar-sign"></i> Expected CTC (LPA)</label><input type="text" id="expectedCTC" placeholder="e.g., 12 - 18 LPA"></div>
+          <div class="input-group"><label><i class="fas fa-map-pin"></i> Preferred Job Locations</label><input type="text" id="locations" placeholder="Bangalore, Hyderabad, Remote"></div>
+          <div class="input-group full-width"><label><i class="fas fa-bell"></i> Availability for Placements</label><select id="availability"><option>Immediately Available</option><option>Within 3 months</option><option>Within 6 months</option></select></div>
+        </div>
+      </div>
+
+      <!-- Navigation Buttons -->
+      <div class="form-buttons">
+        <button type="button" id="prevBtn" class="btn-outline" onclick="changeStep(-1)" style="display:none;"><i class="fas fa-arrow-left"></i> Previous</button>
+        <button type="button" id="nextBtn" class="btn-primary" onclick="changeStep(1)">Next Step <i class="fas fa-arrow-right"></i></button>
+        <button type="submit" id="submitBtn" class="btn-primary" style="display:none;"><i class="fas fa-check-circle"></i> Submit Registration</button>
+      </div>
+    </form>
+
+    <!-- Success Message (hidden) -->
+    <div id="successMessage" class="success-message hidden">
+      <i class="fas fa-check-circle" style="font-size: 3rem; color:#c9a03d;"></i>
+      <h2 style="margin: 1rem 0;">Registration Successful!</h2>
+      <p>Your profile has been submitted. Our placement team will review your details.<br>You'll receive a confirmation email shortly.</p>
+      <button class="btn-primary" onclick="location.reload()" style="margin-top: 1.5rem;"><i class="fas fa-redo"></i> Register Another Student</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  let currentStep = 1;
+  const totalSteps = 4;
+  let selectedSkillsArray = [];
+
+  // DOM elements
+  const step1Div = document.getElementById('step1');
+  const step2Div = document.getElementById('step2');
+  const step3Div = document.getElementById('step3');
+  const step4Div = document.getElementById('step4');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const submitBtn = document.getElementById('submitBtn');
+  const stepIndicators = {
+    1: document.getElementById('step1Indicator'),
+    2: document.getElementById('step2Indicator'),
+    3: document.getElementById('step3Indicator'),
+    4: document.getElementById('step4Indicator')
+  };
+
+  function updateStepVisibility() {
+    step1Div.style.display = currentStep === 1 ? 'block' : 'none';
+    step2Div.style.display = currentStep === 2 ? 'block' : 'none';
+    step3Div.style.display = currentStep === 3 ? 'block' : 'none';
+    step4Div.style.display = currentStep === 4 ? 'block' : 'none';
+
+    // update buttons
+    if (currentStep === 1) {
+      prevBtn.style.display = 'none';
+    } else {
+      prevBtn.style.display = 'inline-flex';
+    }
+    if (currentStep === totalSteps) {
+      nextBtn.style.display = 'none';
+      submitBtn.style.display = 'inline-flex';
+    } else {
+      nextBtn.style.display = 'inline-flex';
+      submitBtn.style.display = 'none';
+    }
+
+    // update step indicators style
+    for (let i = 1; i <= totalSteps; i++) {
+      const indicator = stepIndicators[i];
+      if (i === currentStep) {
+        indicator.classList.add('active');
+        indicator.classList.remove('completed');
+      } else if (i < currentStep) {
+        indicator.classList.add('completed');
+        indicator.classList.remove('active');
+      } else {
+        indicator.classList.remove('active', 'completed');
+      }
+    }
+  }
+
+  function validateCurrentStep() {
+    if (currentStep === 1) {
+      const name = document.getElementById('fullName').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      if (!name) { alert('Please enter your full name'); return false; }
+      if (!email) { alert('Please enter email address'); return false; }
+      if (!phone) { alert('Please enter phone number'); return false; }
+      if (!email.includes('@')) { alert('Enter valid email'); return false; }
+      return true;
+    }
+    if (currentStep === 2) {
+      const uni = document.getElementById('university').value.trim();
+      const degree = document.getElementById('degree').value.trim();
+      const cgpa = document.getElementById('cgpa').value;
+      if (!uni) { alert('University name required'); return false; }
+      if (!degree) { alert('Degree/Course required'); return false; }
+      if (!cgpa || cgpa <= 0) { alert('Valid CGPA required'); return false; }
+      return true;
+    }
+    if (currentStep === 3) {
+      if (selectedSkillsArray.length === 0) {
+        alert('Please select at least one technical skill');
+        return false;
+      }
+      return true;
+    }
+    if (currentStep === 4) {
+      const resumeFile = document.getElementById('resumeFile').files[0];
+      if (!resumeFile) { alert('Please upload your resume (PDF)'); return false; }
+      if (resumeFile.type !== 'application/pdf') { alert('Resume must be PDF format'); return false; }
+      return true;
+    }
+    return true;
+  }
+
+  function changeStep(delta) {
+    if (delta === 1 && !validateCurrentStep()) return;
+    currentStep += delta;
+    if (currentStep < 1) currentStep = 1;
+    if (currentStep > totalSteps) currentStep = totalSteps;
+    updateStepVisibility();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // skill chips selection
+  const skillChips = document.querySelectorAll('.skill-chip');
+  skillChips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      const skill = chip.getAttribute('data-skill');
+      chip.classList.toggle('selected');
+      if (chip.classList.contains('selected')) {
+        if (!selectedSkillsArray.includes(skill)) selectedSkillsArray.push(skill);
+      } else {
+        selectedSkillsArray = selectedSkillsArray.filter(s => s !== skill);
+      }
+      document.getElementById('selectedSkills').value = selectedSkillsArray.join(', ');
+    });
+  });
+
+  // file upload label update
+  const resumeInput = document.getElementById('resumeFile');
+  const photoInput = document.getElementById('photoFile');
+  const resumeLabel = document.getElementById('resumeLabel');
+  const photoLabel = document.getElementById('photoLabel');
+  resumeInput.addEventListener('change', (e) => {
+    if (e.target.files.length) resumeLabel.innerHTML = `<i class="fas fa-file-pdf"></i> ${e.target.files[0].name}`;
+    else resumeLabel.innerHTML = `<i class="fas fa-cloud-upload-alt"></i> Click to upload resume (PDF)`;
+  });
+  photoInput.addEventListener('change', (e) => {
+    if (e.target.files.length) photoLabel.innerHTML = `<i class="fas fa-image"></i> ${e.target.files[0].name}`;
+    else photoLabel.innerHTML = `<i class="fas fa-camera"></i> Upload photo`;
+  });
+
+  function handleSubmit() {
+    if (!validateCurrentStep()) return;
+    // gather all data for demo
+    const fullName = document.getElementById('fullName').value;
+    const email = document.getElementById('email').value;
+    const phone = document.getElementById('phone').value;
+    const university = document.getElementById('university').value;
+    const degree = document.getElementById('degree').value;
+    const cgpa = document.getElementById('cgpa').value;
+    const skills = selectedSkillsArray.join(', ');
+    const resumeFile = resumeInput.files[0]?.name || 'Not provided';
+    
+    console.log('Form submitted:', { fullName, email, phone, university, degree, cgpa, skills, resumeFile });
+    // Hide form and show success
+    document.getElementById('studentForm').style.display = 'none';
+    document.getElementById('successMessage').classList.remove('hidden');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // optional: send data to backend simulation
+    alert(`🎉 Thank you ${fullName}! Your registration is complete. Our placement team will reach out soon.`);
+  }
+
+  // Initialize step view
+  updateStepVisibility();
+
+  // additional hover effects for glassmorphism consistency
+  const formCard = document.querySelector('.form-card');
+  if(formCard) formCard.classList.add('glass-card');
+</script>
+<style>
+  .glass-card {
+    background: rgba(12, 12, 20, 0.7);
+    backdrop-filter: blur(16px);
+    border-radius: 40px;
+    border: 1px solid rgba(201, 160, 61, 0.25);
+  }
+  .skill-chip {
+    user-select: none;
+  }
+  input, select, textarea {
+    transition: all 0.2s;
+  }
+</style>
+</body>
+</html>

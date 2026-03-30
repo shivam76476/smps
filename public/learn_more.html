@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>SPMS Dashboard | Smart Placement Management System</title>
+  <!-- Google Fonts & Font Awesome -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: radial-gradient(circle at 10% 20%, #08080c, #000000);
+      font-family: 'Inter', sans-serif;
+      color: #ededed;
+      line-height: 1.5;
+      scroll-behavior: smooth;
+      overflow-x: hidden;
+    }
+
+    /* custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #111;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #c9a03d;
+      border-radius: 6px;
+    }
+
+    /* premium glass & shadow utility */
+    .glass-card {
+      background: rgba(20, 20, 30, 0.65);
+      backdrop-filter: blur(12px);
+      border-radius: 32px;
+      border: 1px solid rgba(255, 215, 120, 0.2);
+      box-shadow: 0 20px 35px -12px rgba(0,0,0,0.5), 0 0 0 1px rgba(201, 160, 61, 0.1) inset;
+      transition: all 0.35s ease;
+    }
+
+    .glass-card:hover {
+      border-color: rgba(201, 160, 61, 0.5);
+      transform: translateY(-4px);
+      box-shadow: 0 25px 40px -12px rgba(0,0,0,0.6), 0 0 0 1px rgba(201, 160, 61, 0.3) inset;
+    }
+
+    /* dashboard layout */
+    .dashboard-container {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      width: 280px;
+      background: rgba(8, 8, 12, 0.85);
+      backdrop-filter: blur(16px);
+      border-right: 1px solid rgba(201, 160, 61, 0.2);
+      padding: 2rem 1.5rem;
+      position: fixed;
+      height: 100vh;
+      overflow-y: auto;
+      z-index: 100;
+      transition: all 0.3s;
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 2.5rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid rgba(201, 160, 61, 0.2);
+    }
+
+    .logo-area i {
+      font-size: 2rem;
+      color: #c9a03d;
+    }
+
+    .logo-area h2 {
+      font-size: 1.3rem;
+      font-weight: 600;
+      background: linear-gradient(135deg, #fff, #e0c38c);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .nav-menu {
+      list-style: none;
+    }
+
+    .nav-item {
+      padding: 0.9rem 1rem;
+      margin: 0.5rem 0;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      color: #b0b0b0;
+      transition: all 0.25s;
+      cursor: pointer;
+    }
+
+    .nav-item i {
+      width: 24px;
+      font-size: 1.2rem;
+    }
+
+    .nav-item.active {
+      background: rgba(201, 160, 61, 0.15);
+      color: #c9a03d;
+      border-left: 3px solid #c9a03d;
+    }
+
+    .nav-item:hover:not(.active) {
+      background: rgba(255, 255, 255, 0.05);
+      color: #e0c38c;
+    }
+
+    /* MAIN CONTENT */
+    .main-content {
+      flex: 1;
+      margin-left: 280px;
+      padding: 2rem 2rem 2rem 2rem;
+    }
+
+    /* top header */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .page-title h1 {
+      font-size: 1.8rem;
+      font-weight: 600;
+      background: linear-gradient(135deg, #fff, #e0c38c);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .user-profile {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      background: rgba(20, 20, 30, 0.6);
+      padding: 0.5rem 1.2rem;
+      border-radius: 40px;
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(201, 160, 61, 0.2);
+    }
+
+    .avatar {
+      width: 42px;
+      height: 42px;
+      background: linear-gradient(135deg, #c9a03d, #b3862a);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+    }
+
+    /* stats cards row */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      padding: 1.5rem;
+      border-radius: 28px;
+      background: rgba(12, 12, 18, 0.7);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(201, 160, 61, 0.2);
+      transition: all 0.3s;
+    }
+
+    .stat-card h3 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #c9a03d;
+      margin-bottom: 0.5rem;
+    }
+
+    /* recent activity & upcoming interviews grid */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap: 1.8rem;
+      margin-bottom: 2rem;
+    }
+
+    .info-panel {
+      background: rgba(10, 10, 15, 0.6);
+      backdrop-filter: blur(8px);
+      border-radius: 28px;
+      padding: 1.5rem;
+      border: 1px solid rgba(201, 160, 61, 0.2);
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.2rem;
+      border-bottom: 1px solid rgba(201, 160, 61, 0.2);
+      padding-bottom: 0.8rem;
+    }
+
+    .activity-item, .interview-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.8rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .activity-icon {
+      width: 40px;
+      height: 40px;
+      background: rgba(201, 160, 61, 0.15);
+      border-radius: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #c9a03d;
+    }
+
+    .job-listings {
+      margin-top: 1.5rem;
+    }
+
+    .job-card {
+      background: rgba(20, 20, 30, 0.5);
+      border-radius: 20px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      transition: 0.2s;
+      border-left: 3px solid #c9a03d;
+    }
+
+    .badge {
+      background: rgba(201, 160, 61, 0.2);
+      padding: 0.2rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.7rem;
+      color: #c9a03d;
+    }
+
+    .btn-sm {
+      background: rgba(201, 160, 61, 0.2);
+      border: none;
+      color: #c9a03d;
+      padding: 0.4rem 1rem;
+      border-radius: 30px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .btn-sm:hover {
+      background: rgba(201, 160, 61, 0.4);
+      color: #fff;
+    }
+
+    /* responsive */
+    @media (max-width: 900px) {
+      .sidebar {
+        transform: translateX(-100%);
+        position: fixed;
+        z-index: 200;
+      }
+      .sidebar.open {
+        transform: translateX(0);
+      }
+      .main-content {
+        margin-left: 0;
+        padding: 1.5rem;
+      }
+      .menu-toggle {
+        display: block;
+        background: rgba(201,160,61,0.2);
+        border: none;
+        color: #c9a03d;
+        padding: 0.6rem 1rem;
+        border-radius: 30px;
+        cursor: pointer;
+      }
+    }
+
+    @media (min-width: 901px) {
+      .menu-toggle {
+        display: none;
+      }
+    }
+
+    /* additional */
+    .counter-up {
+      transition: all 0.5s;
+    }
+
+    button, a {
+      cursor: pointer;
+    }
+
+    .footer-mini {
+      margin-top: 2rem;
+      text-align: center;
+      color: #666;
+      font-size: 0.75rem;
+      border-top: 1px solid rgba(201,160,61,0.1);
+      padding-top: 1.5rem;
+    }
+  </style>
+</head>
+<body>
+<div class="dashboard-container">
+  <!-- Sidebar Navigation -->
+  <aside class="sidebar" id="sidebar">
+    <div class="logo-area">
+      <i class="fas fa-chalkboard-user"></i>
+      <h2>SPMS Dashboard</h2>
+    </div>
+    <ul class="nav-menu">
+      <li class="nav-item active" data-tab="overview">
+        <i class="fas fa-tachometer-alt"></i> <span>Overview</span>
+      </li>
+      <li class="nav-item" data-tab="jobs">
+        <i class="fas fa-briefcase"></i> <span>Job Listings</span>
+      </li>
+      <li class="nav-item" data-tab="applications">
+        <i class="fas fa-file-alt"></i> <span>Applications</span>
+      </li>
+      <li class="nav-item" data-tab="companies">
+        <i class="fas fa-building"></i> <span>Companies</span>
+      </li>
+      <li class="nav-item" data-tab="reports">
+        <i class="fas fa-chart-line"></i> <span>Analytics</span>
+      </li>
+      <li class="nav-item" data-tab="settings">
+        <i class="fas fa-cog"></i> <span>Settings</span>
+      </li>
+    </ul>
+  </aside>
+
+  <!-- Main Dashboard Content -->
+  <main class="main-content">
+    <div class="top-bar">
+      <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i> Menu</button>
+      <div class="page-title">
+        <h1 id="dashboardTitle">Dashboard Overview</h1>
+      </div>
+      <div class="user-profile">
+        <i class="fas fa-bell" style="color:#c9a03d;"></i>
+        <div class="avatar">JD</div>
+        <span>John Doe <i class="fas fa-chevron-down" style="font-size: 0.7rem;"></i></span>
+      </div>
+    </div>
+
+    <!-- Overview Tab Content (default) -->
+    <div id="overviewTab" class="tab-content">
+      <!-- Stats Cards with animated counters -->
+      <div class="stats-row">
+        <div class="stat-card glass-card"><h3><span class="dash-counter" data-target="128">0</span></h3><p>Total Applications</p><i class="fas fa-paper-plane" style="color:#c9a03d; float:right;"></i></div>
+        <div class="stat-card glass-card"><h3><span class="dash-counter" data-target="24">0</span></h3><p>Active Interviews</p><i class="fas fa-calendar-check" style="color:#c9a03d; float:right;"></i></div>
+        <div class="stat-card glass-card"><h3><span class="dash-counter" data-target="8">0</span></h3><p>Offers Received</p><i class="fas fa-trophy" style="color:#c9a03d; float:right;"></i></div>
+        <div class="stat-card glass-card"><h3><span class="dash-counter" data-target="92">0</span>%</h3><p>Profile Completion</p><i class="fas fa-chart-simple" style="color:#c9a03d; float:right;"></i></div>
+      </div>
+
+      <!-- Dashboard grid: Recent Activity + Upcoming Interviews -->
+      <div class="dashboard-grid">
+        <div class="info-panel">
+          <div class="panel-header"><h3><i class="fas fa-history"></i> Recent Activity</h3><span class="badge">Last 7 days</span></div>
+          <div class="activity-item"><div class="activity-icon"><i class="fas fa-briefcase"></i></div><div><strong>Applied to Google</strong><br><small>Software Engineer Intern • 2 hours ago</small></div></div>
+          <div class="activity-item"><div class="activity-icon"><i class="fas fa-file-pdf"></i></div><div><strong>Resume updated</strong><br><small>Added AI/ML projects • Yesterday</small></div></div>
+          <div class="activity-item"><div class="activity-icon"><i class="fas fa-envelope-open-text"></i></div><div><strong>Interview invitation</strong><br><small>Microsoft SDE • 2 days ago</small></div></div>
+          <div class="activity-item"><div class="activity-icon"><i class="fas fa-chart-line"></i></div><div><strong>Placement report generated</strong><br><small>Weekly summary • 3 days ago</small></div></div>
+        </div>
+
+        <div class="info-panel">
+          <div class="panel-header"><h3><i class="fas fa-calendar-alt"></i> Upcoming Interviews</h3><span class="badge">Next 7 days</span></div>
+          <div class="interview-item"><i class="fas fa-building" style="color:#c9a03d; width:32px;"></i><div><strong>Amazon</strong><br>Software Dev Role • <span style="color:#c9a03d;">Tomorrow 10:30 AM</span></div><button class="btn-sm">Join</button></div>
+          <div class="interview-item"><i class="fas fa-chart-line" style="color:#c9a03d; width:32px;"></i><div><strong>Goldman Sachs</strong><br>Analyst Position • <span style="color:#c9a03d;">Apr 2, 2:00 PM</span></div><button class="btn-sm">Details</button></div>
+          <div class="interview-item"><i class="fas fa-microchip" style="color:#c9a03d; width:32px;"></i><div><strong>NVIDIA</strong><br>ML Engineer • <span style="color:#c9a03d;">Apr 4, 11:00 AM</span></div><button class="btn-sm">Prepare</button></div>
+        </div>
+      </div>
+
+      <!-- Recommended Jobs Section -->
+      <div class="info-panel" style="margin-top: 0.5rem;">
+        <div class="panel-header"><h3><i class="fas fa-star"></i> Recommended For You</h3><i class="fas fa-robot" style="color:#c9a03d;"></i></div>
+        <div class="job-listings" id="jobListings">
+          <div class="job-card"><div style="display: flex; justify-content: space-between;"><strong>Frontend Developer @ Tesla</strong><span class="badge">Full-time</span></div><p style="font-size:0.8rem; margin-top:6px;">Palo Alto, CA • React, Tailwind • Immediate</p><button class="btn-sm">Apply Now</button></div>
+          <div class="job-card"><div style="display: flex; justify-content: space-between;"><strong>Backend Engineer @ Stripe</strong><span class="badge">Remote</span></div><p style="font-size:0.8rem;">Node.js, Python, AWS • Salary: $140k+</p><button class="btn-sm">Apply Now</button></div>
+          <div class="job-card"><div style="display: flex; justify-content: space-between;"><strong>Data Analyst @ Netflix</strong><span class="badge">Hybrid</span></div><p style="font-size:0.8rem;">SQL, Tableau, Python • 2+ years exp</p><button class="btn-sm">Apply Now</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Other Tabs (simulated dynamic content) -->
+    <div id="jobsTab" class="tab-content" style="display: none;">
+      <div class="info-panel">
+        <div class="panel-header"><h3><i class="fas fa-briefcase"></i> All Active Job Listings</h3><button class="btn-sm" style="background:#c9a03d20;"><i class="fas fa-filter"></i> Filter</button></div>
+        <div class="job-card"><strong>Software Engineer (L4) @ Google</strong><p>Sunnyvale, CA • AI/ML, Distributed Systems • Apply by Apr 10</p><button class="btn-sm">Quick Apply</button></div>
+        <div class="job-card"><strong>Product Manager @ Adobe</strong><p>San Jose • 3+ years product • Competitive package</p><button class="btn-sm">Quick Apply</button></div>
+        <div class="job-card"><strong>DevOps Engineer @ Cloudflare</strong><p>Remote • Kubernetes, Terraform, CI/CD</p><button class="btn-sm">Quick Apply</button></div>
+        <div class="job-card"><strong>UI/UX Designer @ Apple</strong><p>Cupertino • Figma, Design Systems</p><button class="btn-sm">Quick Apply</button></div>
+      </div>
+    </div>
+
+    <div id="applicationsTab" class="tab-content" style="display: none;">
+      <div class="info-panel"><div class="panel-header"><h3><i class="fas fa-file-alt"></i> My Applications</h3></div>
+        <div class="activity-item"><i class="fas fa-check-circle" style="color:#2ecc71;"></i><div><strong>Microsoft</strong> – Application Status: <span style="color:#c9a03d;">Interview Scheduled</span></div></div>
+        <div class="activity-item"><i class="fas fa-clock" style="color:#f39c12;"></i><div><strong>Spotify</strong> – Under Review</div></div>
+        <div class="activity-item"><i class="fas fa-times-circle" style="color:#e74c3c;"></i><div><strong>Meta</strong> – Not Selected</div></div>
+        <div class="activity-item"><i class="fas fa-check-circle" style="color:#2ecc71;"></i><div><strong>Amazon</strong> – Offer Received (View Details)</div></div>
+      </div>
+    </div>
+
+    <div id="companiesTab" class="tab-content" style="display: none;">
+      <div class="info-panel"><div class="panel-header"><h3><i class="fas fa-building"></i> Top Hiring Companies</h3></div>
+        <div class="stats-row" style="grid-template-columns:repeat(2,1fr);"><div class="stat-card">🏢 Google<br>Active Jobs: 12</div><div class="stat-card">🏢 Microsoft<br>Active Jobs: 8</div><div class="stat-card">🏢 Amazon<br>Active Jobs: 15</div><div class="stat-card">🏢 Apple<br>Active Jobs: 7</div></div>
+      </div>
+    </div>
+
+    <div id="reportsTab" class="tab-content" style="display: none;">
+      <div class="info-panel"><div class="panel-header"><h3><i class="fas fa-chart-line"></i> Placement Analytics</h3></div>
+        <div class="stats-row"><div class="stat-card"><h4>Total Students Placed</h4><p style="font-size:2rem; color:#c9a03d;">187</p></div><div class="stat-card"><h4>Avg CTC</h4><p style="font-size:2rem; color:#c9a03d;">₹24.5 LPA</p></div></div>
+        <div style="background:rgba(201,160,61,0.1); border-radius:24px; padding:1rem;"><i class="fas fa-download"></i> Download full placement report (PDF)</div>
+      </div>
+    </div>
+
+    <div id="settingsTab" class="tab-content" style="display: none;">
+      <div class="info-panel"><div class="panel-header"><h3><i class="fas fa-user-edit"></i> Profile Settings</h3></div>
+        <p><strong>Email:</strong> john.doe@university.edu</p><p><strong>Resume:</strong> <span class="badge">Last updated yesterday</span> <button class="btn-sm">Upload new</button></p>
+        <p><strong>Notification preferences:</strong> Email & Push <button class="btn-sm">Configure</button></p>
+        <hr style="margin:1rem 0; border-color:#333;"><button class="btn-primary" style="padding:8px 20px;">Save Changes</button>
+      </div>
+    </div>
+
+    <div class="footer-mini">© 2025 SPMS Dashboard — Real-time insights for smarter placements</div>
+  </main>
+</div>
+
+<script>
+  // Sidebar menu toggle for mobile
+  const menuToggle = document.getElementById('menuToggle');
+  const sidebar = document.getElementById('sidebar');
+  if (menuToggle) {
+    menuToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('open');
+    });
+  }
+  // Close sidebar on click outside (mobile)
+  document.addEventListener('click', function(e) {
+    if (window.innerWidth <= 900) {
+      if (!sidebar.contains(e.target) && !menuToggle.contains(e.target) && sidebar.classList.contains('open')) {
+        sidebar.classList.remove('open');
+      }
+    }
+  });
+
+  // Tab switching logic
+  const navItems = document.querySelectorAll('.nav-item');
+  const tabs = {
+    overview: document.getElementById('overviewTab'),
+    jobs: document.getElementById('jobsTab'),
+    applications: document.getElementById('applicationsTab'),
+    companies: document.getElementById('companiesTab'),
+    reports: document.getElementById('reportsTab'),
+    settings: document.getElementById('settingsTab')
+  };
+  const titleMap = {
+    overview: 'Dashboard Overview',
+    jobs: 'Job Listings & Opportunities',
+    applications: 'My Applications',
+    companies: 'Hiring Companies',
+    reports: 'Analytics & Reports',
+    settings: 'Account Settings'
+  };
+  function activateTab(tabId) {
+    Object.keys(tabs).forEach(key => {
+      if (tabs[key]) tabs[key].style.display = 'none';
+    });
+    if (tabs[tabId]) tabs[tabId].style.display = 'block';
+    const pageTitle = document.getElementById('dashboardTitle');
+    if (pageTitle && titleMap[tabId]) pageTitle.innerText = titleMap[tabId];
+    // update active class
+    navItems.forEach(item => {
+      const itemTab = item.getAttribute('data-tab');
+      if (itemTab === tabId) item.classList.add('active');
+      else item.classList.remove('active');
+    });
+  }
+  navItems.forEach(item => {
+    item.addEventListener('click', () => {
+      const tabName = item.getAttribute('data-tab');
+      if (tabName && tabs[tabName]) activateTab(tabName);
+      if (window.innerWidth <= 900) sidebar.classList.remove('open');
+    });
+  });
+  // default overview active
+  activateTab('overview');
+
+  // Animated counters for dashboard stats
+  const dashCounters = document.querySelectorAll('.dash-counter');
+  let countersStarted = false;
+  function startDashCounters() {
+    if (countersStarted) return;
+    dashCounters.forEach(counter => {
+      const target = parseInt(counter.getAttribute('data-target'));
+      let current = 0;
+      const increment = target / 45;
+      const update = () => {
+        current += increment;
+        if (current < target) {
+          counter.innerText = Math.floor(current);
+          requestAnimationFrame(update);
+        } else {
+          counter.innerText = target;
+        }
+      };
+      update();
+    });
+    countersStarted = true;
+  }
+  const statsSection = document.querySelector('.stats-row');
+  if (statsSection) {
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        startDashCounters();
+        observer.disconnect();
+      }
+    }, { threshold: 0.3 });
+    observer.observe(statsSection);
+  } else {
+    startDashCounters();
+  }
+
+  // subtle hover effects and extra interactive demo: apply buttons console log
+  const applyBtns = document.querySelectorAll('.btn-sm');
+  applyBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (btn.innerText.includes('Apply') || btn.innerText.includes('Quick Apply')) {
+        alert('✨ Demo: Application submitted successfully! (Smart Placement System)');
+      } else if (btn.innerText.includes('Join') || btn.innerText.includes('Details')) {
+        alert('📅 Interview details will be shared via email. Check your calendar.');
+      }
+    });
+  });
+  // Additional real-time suggestion (simulate active jobs)
+  const jobListingContainer = document.getElementById('jobListings');
+  if(jobListingContainer) {
+    // already populated
+  }
+  // dynamic time greeting (optional)
+  const greeting = () => {
+    const hour = new Date().getHours();
+    let greet = "Good morning";
+    if (hour >= 12 && hour < 18) greet = "Good afternoon";
+    if (hour >= 18) greet = "Good evening";
+    const userNameSpan = document.querySelector('.avatar + span');
+    if(userNameSpan) userNameSpan.innerHTML = `${greet}, John <i class="fas fa-chevron-down"></i>`;
+  };
+  greeting();
+</script>
+
+<style>
+  /* override some dashboard specifics */
+  .btn-primary {
+    background: linear-gradient(135deg, #c9a03d, #b3862a);
+    border: none;
+    color: #0a0a0a;
+    font-weight: 600;
+    border-radius: 40px;
+    transition: transform 0.2s;
+  }
+  .btn-primary:hover {
+    transform: scale(1.02);
+    box-shadow: 0 8px 20px rgba(201, 160, 61, 0.4);
+  }
+  .stat-card, .info-panel {
+    transition: all 0.25s ease;
+  }
+  .sidebar::-webkit-scrollbar {
+    width: 3px;
+  }
+  .job-card:hover {
+    background: rgba(201, 160, 61, 0.08);
+    transform: translateX(5px);
+  }
+  @media (max-width: 600px) {
+    .dashboard-grid { grid-template-columns: 1fr; }
+    .stats-row { grid-template-columns: 1fr 1fr; gap: 1rem; }
+  }
+</style>
+</body>
+</html>
